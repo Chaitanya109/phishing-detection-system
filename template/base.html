@@ -1,0 +1,244 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ML-Based Web Phishing Classifiers Dashboard</title>
+
+  <!-- Bootstrap & Animate.css -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+  <style>
+    /* ===== Background ===== */
+    body {
+      background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1a2a6c);
+      background-size: 400% 400%;
+      animation: gradientBG 12s ease infinite;
+      font-family: "Segoe UI", sans-serif;
+      min-height: 100vh;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ===== Navbar ===== */
+    .navbar {
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .navbar-brand { font-weight: bold; color: #00ff88 !important; }
+    .nav-link { color: #fff !important; transition: all 0.3s ease; }
+    .nav-link:hover, .nav-link.active { color: #00ff88 !important; text-shadow: 0 0 8px #00ff88; }
+
+    /* ===== Page Title ===== */
+    .page-title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 40px;
+      background: linear-gradient(90deg, #00ff88, #00b3ff, #ff6600);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: glowText 6s linear infinite;
+      text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    }
+    @keyframes glowText {
+      0% { background-position: 0%; }
+      50% { background-position: 100%; }
+      100% { background-position: 0%; }
+    }
+
+    /* ===== Module Cards ===== */
+    .module-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 50px;
+    }
+    .module-card {
+      width: 250px;
+      background: rgba(0,255,136,0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 25px 20px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,255,136,0.2);
+    }
+    .module-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,255,136,0.4);
+    }
+    .module-card i {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: #00ff88;
+    }
+    .module-card h5 {
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .module-card p {
+      font-size: 0.9rem;
+      color: #e0ffe0;
+      margin-bottom: 15px;
+    }
+
+    /* Buttons inside cards */
+    .btn-custom {
+      border-radius: 12px;
+      font-weight: 600;
+      padding: 10px 25px;
+      color: #fff;
+      background: linear-gradient(90deg, #008cff, #00b36b, #ff6600);
+      background-size: 200% 200%;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.5s ease;
+    }
+    .btn-custom:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.35);
+      background-position: right center;
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      margin-top: auto;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      padding: 25px 0;
+      text-align: center;
+      color: #ccc;
+    }
+    footer a { color: #00ff88; text-decoration: none; }
+    footer a:hover { text-decoration: underline; color: #fff; }
+
+    /* ===== Responsive ===== */
+    @media(max-width:768px){
+      .page-title { font-size: 1.5rem; margin-bottom: 30px; }
+      .module-card { width: 200px; padding: 20px; }
+      .btn-custom { padding: 8px 20px; font-size: 0.9rem; }
+    }
+  </style>
+
+  <!-- Font Awesome for icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark p-3">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Phishing Classifiers</a>
+      <div class="collapse navbar-collapse justify-content-end">
+        <ul class="navbar-nav">
+          {% if user.is_authenticated %}
+            {% if not user.is_staff %}
+              <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+            {% endif %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About Us</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Title -->
+  <div class="container">
+    <h2 class="page-title animate__animated animate__fadeInDown">
+      Evasion Attacks & Defense Mechanisms for ML-Based Web Phishing Classifiers
+    </h2>
+  </div>
+
+  <!-- Admin Modules -->
+  {% if user.is_authenticated and user.is_staff %}
+  <div class="container module-container animate__animated animate__fadeInUp">
+
+    <div class="module-card">
+      <i class="fas fa-upload"></i>
+      <h5>Upload Dataset</h5>
+      <p>Upload your phishing dataset for training and testing the models.</p>
+      <a href="{% url 'upload' %}" class="btn btn-custom w-100">Go</a>
+    </div>
+
+    <div class="module-card">
+      <i class="fas fa-wand-magic-sparkles"></i>
+      <h5>Preprocessing</h5>
+      <p>Clean and transform your dataset for accurate model predictions.</p>
+      <a href="{% url 'preprocessing' %}" class="btn btn-custom w-100">Go</a>
+    </div>
+
+    <div class="module-card">
+      <i class="fas fa-chart-line"></i>
+      <h5>Logistic Model</h5>
+      <p>Train and test Logistic Regression model on the dataset.</p>
+      <a href="{% url 'alg1' %}" class="btn btn-custom w-100">Go</a>
+    </div>
+
+    <div class="module-card">
+      <i class="fas fa-tree"></i>
+      <h5>Random Forest</h5>
+      <p>Apply Random Forest algorithm for phishing detection.</p>
+      <a href="{% url 'alg2' %}" class="btn btn-custom w-100">Go</a>
+    </div>
+
+    <div class="module-card">
+      <i class="fas fa-project-diagram"></i>
+      <h5>Decision Tree</h5>
+      <p>Build and evaluate a Decision Tree model for classification.</p>
+      <a href="{% url 'alg3' %}" class="btn btn-custom w-100">Go</a>
+    </div>
+
+    <div class="module-card">
+      <i class="fas fa-robot"></i>
+      <h5>Proposed MLP (TF-IDF)</h5>
+      <p>Train the MLP model using TF-IDF features for phishing prediction.</p>
+      <a href="{% url 'alg4' %}" class="btn btn-custom w-100">Go</a>
+    </div>
+
+    <div class="module-card">
+      <i class="fas fa-trophy"></i>
+      <h5>Performance Evaluation</h5>
+      <p>Analyze and compare the performance of all trained models.</p>
+      <a href="{% url 'evaluation' %}" class="btn btn-custom w-100">Go</a>
+    </div>
+
+  </div>
+  {% endif %}
+
+  <!-- User Prediction Button -->
+  {% if user.is_authenticated and not user.is_staff %}
+  <div class="container d-flex justify-content-center mb-5 animate__animated animate__fadeInUp">
+    <a href="{% url 'predict' %}" class="btn btn-custom px-4">Prediction</a>
+  </div>
+  {% endif %}
+
+  <!-- Main Content -->
+  <div class="container mb-5">
+    {% block main %}{% endblock %}
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 ECLS. All Rights Reserved.</p>
+      <small>
+        Developed by <a href="http://ecodelearingsoftwareservices.com/" target="_blank">Prashanth Reddy</a>
+      </small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

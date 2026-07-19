@@ -1,0 +1,160 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% block main %}
+
+<style>
+  /* ===== Background Animation ===== */
+  body {
+    background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1a2a6c);
+    background-size: 400% 400%;
+    animation: gradientBG 12s ease infinite;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #fff;
+  }
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* ===== Floating Circles ===== */
+  .circle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    animation: float 8s ease-in-out infinite;
+  }
+  .circle:nth-child(1) { width: 180px; height: 180px; top: 10%; left: 10%; }
+  .circle:nth-child(2) { width: 250px; height: 250px; bottom: 15%; right: 15%; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+  }
+
+  /* ===== Login Card ===== */
+  .login-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    padding: 40px 30px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 8px 30px rgba(0, 255, 136, 0.3);
+    text-align: center;
+    animation: fadeIn 1.2s ease forwards;
+  }
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== Heading ===== */
+  .login-card h2 {
+    color: #00ff88;
+    margin-bottom: 30px;
+    text-shadow: 0 0 8px #00ff88;
+    font-weight: 700;
+    font-size: 1.8rem;
+    animation: glowText 3s linear infinite;
+  }
+  @keyframes glowText {
+    0%, 100% { text-shadow: 0 0 5px #00ff88, 0 0 10px #00ff88; }
+    50% { text-shadow: 0 0 15px #00ff88, 0 0 30px #00ff88; }
+  }
+
+  /* ===== Form Inputs ===== */
+  .inputGroup {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  .inputGroup label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #fff;
+  }
+  .inputGroup input {
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    transition: all 0.3s ease;
+  }
+  .inputGroup input:focus {
+    background: rgba(255,255,255,0.3);
+    box-shadow: 0 0 8px #00ff88;
+  }
+
+  /* ===== Submit Button ===== */
+  .submitForm {
+    width: 100%;
+    padding: 12px 0;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    background: linear-gradient(90deg, #00ff88, #00b3ff, #ff6600);
+    color: #000;
+    cursor: pointer;
+    transition: all 0.4s ease;
+  }
+  .submitForm:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #00ff88;
+    background: linear-gradient(270deg, #ff6600, #00b3ff, #00ff88);
+  }
+
+  /* ===== Messages ===== */
+  .message {
+    background: rgba(255,255,255,0.2);
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #00ff88;
+    animation: fadeIn 1s ease forwards;
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 600px) {
+    .login-card { padding: 25px 20px; max-width: 300px; }
+    .circle { display: none; }
+  }
+</style>
+
+<!-- Floating Background Circles -->
+<div class="circle"></div>
+<div class="circle"></div>
+
+<!-- Login Form -->
+<div class="login-card">
+  <h2>Login to Dashboard</h2>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="message">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <form method="post" action="">
+    {% csrf_token %}
+    <div class="inputGroup">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" placeholder="Enter Username" required>
+    </div>
+    <div class="inputGroup">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter Password" required>
+    </div>
+    <button type="submit" class="submitForm">Login</button>
+  </form>
+</div>
+
+{% endblock %}

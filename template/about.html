@@ -1,0 +1,204 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% block main %}
+<style>
+  /* Background Gradient Animation */
+  body {
+    background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1a2a6c);
+    background-size: 400% 400%;
+    animation: gradientBG 12s ease infinite;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Container */
+  .aboutContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 60px;
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+  }
+
+  /* Floating leaves with different paths */
+  .leaf {
+    position: absolute;
+    font-size: 2.5rem;
+    opacity: 0.6;
+    animation: floatLeaf 14s linear infinite;
+    z-index: 0;
+  }
+  .leaf:nth-child(1) { left: 10%; top: 5%; animation-delay: 0s; }
+  .leaf:nth-child(2) { right: 15%; top: 15%; animation-delay: 3s; }
+  .leaf:nth-child(3) { left: 20%; bottom: 10%; animation-delay: 6s; }
+  .leaf:nth-child(4) { right: 25%; bottom: 20%; animation-delay: 9s; }
+
+  @keyframes floatLeaf {
+    0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0; }
+    20% { opacity: 0.7; }
+    50% { transform: translateY(80px) rotate(120deg) scale(1.2); opacity: 1; }
+    80% { opacity: 0.5; }
+    100% { transform: translateY(160px) rotate(240deg) scale(1); opacity: 0; }
+  }
+
+  /* Card Styling - White Background */
+  .aboutCard {
+    background: #fff;
+    padding: 45px;
+    border-radius: 22px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+    max-width: 950px;
+    width: 100%;
+    color: #111;
+    animation: fadeInUp 1.5s ease;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+  .aboutCard:hover {
+    transform: scale(1.02) translateY(-5px);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Headings */
+  h3 {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 25px;
+    background: linear-gradient(90deg, #008cff, #00b36b, #ff6600);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: glowText 6s linear infinite;
+  }
+  @keyframes glowText {
+    0% { background-position: 0%; }
+    50% { background-position: 100%; }
+    100% { background-position: 0%; }
+  }
+
+  p {
+    margin-bottom: 18px;
+    line-height: 1.7;
+    color: #333;
+    animation: fadeInUp 1.8s ease;
+  }
+
+  /* Services */
+  .services {
+    margin-top: 35px;
+    animation: fadeInUp 2s ease;
+  }
+  .services h5 {
+    color: #222;
+    font-size: 20px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: 600;
+  }
+  .services li {
+    margin-bottom: 12px;
+    list-style: none;
+    position: relative;
+    padding-left: 28px;
+    color: #444;
+    font-weight: 500;
+  }
+  .services li::before {
+    content: '✔';
+    position: absolute;
+    left: 0;
+    color: #00b36b;
+    font-size: 18px;
+  }
+
+  /* Button */
+  .btnCustom {
+    display: inline-block;
+    padding: 14px 30px;
+    background: linear-gradient(90deg, #008cff, #00b36b, #ff6600);
+    color: #fff;
+    font-weight: 700;
+    border-radius: 28px;
+    text-decoration: none;
+    transition: all 0.4s ease;
+    text-align: center;
+    margin-top: 18px;
+  }
+  .btnCustom:hover {
+    transform: scale(1.08) translateY(-4px);
+    background: linear-gradient(270deg, #ff6600, #00b36b, #008cff);
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    color: #fff;
+  }
+
+  /* Logo */
+  img.logo {
+    display: block;
+    margin: 0 auto 22px auto;
+    max-height: 110px;
+    border-radius: 15px;
+    animation: fadeInUp 1.2s ease;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .aboutCard { padding: 28px; }
+    h3 { font-size: 24px; }
+    p { font-size: 15px; }
+  }
+</style>
+
+<div class="aboutContainer">
+  <!-- Floating leaves -->
+  <div class="leaf">🍃</div>
+  <div class="leaf">🌿</div>
+  <div class="leaf">🍀</div>
+  <div class="leaf">🍂</div>
+
+  <div class="aboutCard">
+    <img src="{% static 'ecls_logo-removebg-preview.png' %}" alt="Logo" class="logo">
+
+    <h3>About Us</h3>
+
+    <p class="lead text-center">
+      Over <strong>09 Years</strong> of Professional Experience in Empowering Research and Innovation.
+    </p>
+
+    <p>
+      Our approach to project development is distinct and deeply rooted in <strong>research and development</strong>. We believe that meaningful innovation comes from continuous learning, experimentation, and adaptation. With more than nine years of professional experience, our journey has always been guided by a passion for knowledge and a drive to help others reach academic and professional excellence.
+    </p>
+
+    <p>
+      Our vision is bold: to redefine methodologies through a future-forward lens. This ambition is backed by our unwavering focus on <strong>R&D</strong>, ensuring every solution we offer is robust, innovative, and impactful. Whether it’s academic support, technical consulting, or publication services, our team is dedicated to delivering excellence.
+    </p>
+
+    <p><strong>Our mission:</strong> To enable world-class companies and individuals to enhance productivity, performance, and success—driven by knowledge and supported by people.</p>
+
+    <div class="services">
+      <h5>Our Core Services</h5>
+      <ul>
+        <li>Paper Write-Up Assistance</li>
+        <li>International Journal Paper Publication</li>
+        <li>Plagiarism Check and Removal</li>
+        <li>Full P.H.D Thesis and Research Support</li>
+      </ul>
+    </div>
+
+    <div class="text-center" style="margin-top:35px;">
+      <p>Visit our full site for more:</p>
+      <a href="http://ecodelearingsoftwareservices.com/about-us.html" target="_blank" class="btnCustom">
+        www.ecodelearingsoftwareservices.com
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

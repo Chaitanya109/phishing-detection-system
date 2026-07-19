@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static %}
+{% block main %}
+
+<style>
+  /* ===== Container ===== */
+  .message-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    gap: 20px;
+  }
+
+  /* ===== Messages ===== */
+  .alert-card {
+    background: rgba(0, 255, 136, 0.1);
+    backdrop-filter: blur(10px);
+    color: #e0ffe0;
+    padding: 15px 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+    font-weight: 500;
+    font-size: 1.1rem;
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+    animation: fadeInUp 1s ease forwards;
+  }
+
+  /* ===== Image Styling ===== */
+  .main-image {
+    width: 100%;
+    max-width: 980px;
+    height: auto;
+    margin-top: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+  .main-image:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 25px rgba(0, 255, 136, 0.5);
+  }
+
+  /* ===== Heading ===== */
+  .page-heading {
+    color: #00ff88;
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    text-shadow: 0 0 8px #00ff88;
+    margin-bottom: 25px;
+    animation: glowText 3s linear infinite;
+  }
+
+  /* ===== Animations ===== */
+  @keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes glowText {
+    0% { text-shadow: 0 0 5px #00ff88, 0 0 10px #00ff88; }
+    50% { text-shadow: 0 0 15px #00ff88, 0 0 30px #00ff88; }
+    100% { text-shadow: 0 0 5px #00ff88, 0 0 10px #00ff88; }
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 768px) {
+    .main-image { max-width: 90%; height: auto; }
+    .page-heading { font-size: 1.5rem; }
+  }
+</style>
+
+<div class="message-container">
+
+  <!-- Page Heading -->
+  <h1 class="page-heading">Welcome, {{ request.user.username }}!</h1>
+
+  <!-- Messages -->
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert-card animate__animated animate__fadeInUp">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <!-- Main Image -->
+  <img src="{% static 'images/dashboard_main.png' %}" alt="Dashboard Image" class="main-image animate__animated animate__zoomIn"/>
+
+</div>
+
+{% endblock %}
